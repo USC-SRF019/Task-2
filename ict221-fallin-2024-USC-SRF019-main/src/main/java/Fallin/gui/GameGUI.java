@@ -5,7 +5,6 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 /**
@@ -14,17 +13,26 @@ import javafx.stage.Stage;
  * NOTE: Do NOT run this class directly in IntelliJ - run 'RunGame' instead.
  */
 public class GameGUI extends Application {
+    private GameEngine gameEngine;
+    private Controller controller;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        BorderPane root = FXMLLoader.load(getClass().getResource("game_gui.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fallin/gui/game_gui.fxml"));
+        Parent root = loader.load();
+        controller = loader.getController();
+
+        gameEngine = new GameEngine(10, 5); // 10x10 grid with difficulty 5
+        controller.setGameEngine(gameEngine);
 
         primaryStage.setScene(new Scene(root, 800, 800));
         primaryStage.setTitle("Fallin Game");
         primaryStage.show();
+
+        // Add key event handler to the scene
+        primaryStage.getScene().setOnKeyPressed(controller::handleKeyInput);
     }
 
-    /** In IntelliJ, do NOT run this method.  Run 'RunGame.main()' instead. */
     public static void main(String[] args) {
         launch(args);
     }
